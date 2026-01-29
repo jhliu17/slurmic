@@ -1,0 +1,13 @@
+python test_slurm.py \
+    --slurm.mode slurm \
+    --slurm.slurm-job-name _slurm_test \
+    --slurm.slurm-partition zhanglab.p \
+    --slurm.node-list laniakea \
+    --slurm.num-of-node 1 \
+    --slurm.tasks-per-node 2 \
+    --slurm.gpus-per-task 1 \
+    --slurm.cpus-per-task 2 \
+    --slurm.mem 128GB \
+    --slurm.use-distributed-env \
+    --slurm.distributed-launch-command "accelerate launch --config_file distributed.yaml --num_processes {num_processes} --num_machines {num_machines} --machine_rank {machine_rank} --main_process_ip {main_process_ip} --main_process_port {main_process_port} test_slurm.py" \
+    --experiment-name test_slurm
