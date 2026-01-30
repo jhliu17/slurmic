@@ -43,7 +43,8 @@
    job2 = fn2(7, 12)
    jobs.append(job2)
 
-   results = [job.result() for job in jobs]  # This will block until all jobs are finished
+   # This will block until all jobs are finished
+   results = [job.result() for job in jobs]
    assert results == [12, 19]
 ```
 
@@ -64,7 +65,12 @@
          cpus_per_task=8,
          gpus_per_node=4,
          use_distributed_env=True,
-         distributed_launch_command="accelerate launch --config_file CONFIG_FILE --num_processes {num_processes} --num_machines {num_machines} --machine_rank {machine_rank} --main_process_ip {main_process_ip} --main_process_port {main_process_port} main.py",  # main.py is the entry of the distributed job
+         # main.py is the entry of the distributed job
+         distributed_launch_command="accelerate launch \
+            --config_file CONFIG_FILE --num_processes {num_processes} \
+               --num_machines {num_machines} --machine_rank {machine_rank} \
+                  --main_process_ip {main_process_ip} --main_process_port {main_process_port} \
+                     main.py",
    )
 
    main[slurm_config](config)
@@ -72,10 +78,7 @@
 
 ## Installation
 
-slurmic is tested and supported on the following systems:
-
-* Python 3.10-3.13
-* Linux systems with Slurm installed
+slurmic supports Python 3.10-3.13 and is tested on Linux systems with Slurm installed.
 
 Install slurmic via pip
 
