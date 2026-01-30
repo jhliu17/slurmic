@@ -1,0 +1,46 @@
+name: Build and Publish Documentation
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          # Install a specific version of uv.
+          version: "0.9.18"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install packages
+        run: |
+          uv sync --locked
+
+      - name: Sphinx build
+        run: |
+          uv run sphinx-build docs docs/_build
+          mkdir -p docs/wheel
+          cp -rf docs/wheel docs/_build/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name == 'release'}}
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/
+          force_orphan: true

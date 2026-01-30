@@ -1,10 +1,16 @@
-# 🌩️ slurmic
+# Getting Started
 
-[![Pytest](https://github.com/jhliu17/SLURMIC/actions/workflows/pytest.yml/badge.svg)](https://github.com/jhliu17/SLURMIC/actions/workflows/pytest.yml) [![Documentation](https://github.com/jhliu17/SLURMIC/actions/workflows/docs.yml/badge.svg)](https://github.com/jhliu17/SLURMIC/actions/workflows/docs.yml)
+## Installation
 
-`slurmic` is a package designed to provide seamless Python function execution on Slurm.
+`slurmic` supports Python 3.10-3.13 and is tested on Linux systems with Slurm installed.
 
-## Features
+Install `slurmic` via pip:
+
+```bash
+pip install slurmic
+```
+
+## Quick Guide
 
 ### Execute Python functions on Slurm just like local functions
 
@@ -69,40 +75,3 @@
 
    main[slurm_config](config)
 ```
-
-## Installation
-
-slurmic is tested and supported on the following systems:
-
-* Python 3.10-3.13
-* Linux systems with Slurm installed
-
-Install slurmic via pip
-
-```bash
-   pip install slurmic
-```
-
-## Development
-
-### Development Installation
-
-```bash
-pip install -e ".[dev]"
-```
-
-### Testing
-
-```bash
-pytest
-```
-
-### Build Wheel
-
-```bash
-uv build
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
