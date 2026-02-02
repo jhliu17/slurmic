@@ -2,7 +2,7 @@
 
 [![Pytest](https://github.com/jhliu17/SLURMIC/actions/workflows/pytest.yml/badge.svg)](https://github.com/jhliu17/SLURMIC/actions/workflows/pytest.yml) [![Documentation](https://github.com/jhliu17/SLURMIC/actions/workflows/docs.yml/badge.svg)](https://github.com/jhliu17/SLURMIC/actions/workflows/docs.yml)
 
-`slurmic` is a package designed to provide seamless Python function execution on Slurm.
+slurmic is a package designed to provide seamless Python function execution on Slurm.
 
 ## Features
 

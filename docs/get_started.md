@@ -2,9 +2,9 @@
 
 ## Installation
 
-`slurmic` supports Python 3.10-3.13 and is tested on Linux systems with Slurm installed.
+slurmic supports Python 3.10-3.13 and is tested on Linux systems with Slurm installed.
 
-Install `slurmic` via pip:
+Install slurmic via pip:
 
 ```bash
 pip install slurmic

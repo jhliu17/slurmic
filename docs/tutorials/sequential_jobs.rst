@@ -1,7 +1,7 @@
 Slurm Jobs with slurmic
 ######################
 
-This example shows how to submit a series of jobs with ``slurmic``.
+This example shows how to submit a series of jobs with `slurmic`.
 
 Configuration of SlurmFunction
 ==============================
