@@ -2,10 +2,7 @@ name: Build and Publish Documentation
 
 on:
   push:
-    branches:
-      - main
-  release:
-    types: [created]
+    branches: [main]
 
 permissions:
   contents: write
