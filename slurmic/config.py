@@ -60,7 +60,7 @@ class SlurmConfig:
 
         processes_per_task (int): The number of processes to run per task. This value is not used by SLURM but is relevant for correctly set up distributed environments. Default is 1.
 
-        distributed_launch_command (str): The command to launch distributed environment setup, using environment variables like ``{num_processes}``, ``{num_machines}``, ``{machine_rank}``, ``{main_process_ip}``, ``{main_process_port}``. Default is an empty string.
+        distributed_launch_command (str): The command to launch the distributed task (executed after the distributed environment is set up). It can use environment variables like ``{num_processes}``, ``{num_machines}``, ``{machine_rank}``, ``{main_process_ip}``, ``{main_process_port}``. Default is an empty string.
 
         extra_params_kwargs (Dict[str, str]): Additional parameters for the SLURM job as a dictionary of key-value pairs. Default is an empty dictionary.
 
@@ -69,97 +69,35 @@ class SlurmConfig:
         extra_task_kwargs (Dict[str, str]): Additional task parameters for the SLURM job as a dictionary of key-value pairs. Default is an empty dictionary.
     """
 
-    # running mode
     mode: Literal["run", "debug", "local", "slurm"] = "run"
-
-    # slurm job name
     job_name: str = "Job"
-
-    # slurm partition name
     partition: str = ""
-
-    # slurm output parent path
     output_parent_path: str = "./"
-
-    # slurm output folder name
     output_folder: str = "slurm"
-
-    # node list string (leave blank to use all nodes)
     node_list: str = ""
-
-    # node list string to be excluded (leave blank to use all nodes in the node list)
     node_list_exclude: str = ""
-
-    # number of nodes to request
     num_of_node: int = 1
-
-    # tasks per node
     tasks_per_node: int = 1
-
-    # number of gpus per task to request
     gpus_per_task: int = 0
-
-    # number of cpus per task to request
     cpus_per_task: int = 1
-
-    # number of gpus per node to request (if this is set, gpus_per_task will be ignored)
     gpus_per_node: Optional[int] = None
-
-    # memory (GB) to request (leave black to use default memory configurations in the node)
     mem: str = ""
-
-    # time out min
     timeout_min: int = sys.maxsize
-
-    # whether to redirect stderr to stdout
     stderr_to_stdout: bool = False
-
-    # environment variables setup command
     setup: List[str] = field(default_factory=list)
-
-    # whether to pack code
     pack_code: bool = False
-
-    # use packed code to run
     use_packed_code: bool = False
-
-    # code root
     code_root: str = "."
-
-    # code file extensions
     code_file_suffixes: list[str] = field(default_factory=lambda: [".py", ".sh", ".yaml", ".toml"])
-
-    # exclude folders (relative to the code root)
     exclude_code_folders: list[str] = field(
         default_factory=lambda: ["wandb", "outputs", "datasets"]
     )
-
-    # whether to use distributed environment
     use_distributed_env: bool = False
-
-    # distributed enviroment task
     distributed_env_task: Literal["torch"] = "torch"
-
-    # processes per task (this value is not used by slurm, but in the distributed environment)
     processes_per_task: int = 1
-
-    # distributed launch command (this will be called after the distributed enviroment is set up)
-    # the following environment variables are available:
-    #   num_processes: int
-    #   num_machines: int
-    #   machine_rank: int
-    #   main_process_ip: str
-    #   main_process_port: int
-    # use braces to access the environment variables, e.g. {num_processes}
     distributed_launch_command: str = ""
-
-    # extra slurm job parameters
     extra_params_kwargs: Dict[str, str] = field(default_factory=dict)
-
-    # extra slurm submit parameters
     extra_submit_kwargs: Dict[str, str] = field(default_factory=dict)
-
-    # extra slurm task parameters
     extra_task_kwargs: Dict[str, str] = field(default_factory=dict)
 
     def _configuration_check(self):
