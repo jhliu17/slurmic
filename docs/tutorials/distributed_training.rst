@@ -1,7 +1,7 @@
 Distributed Training with PyTorch
 #################################
 
-The distributed training with `slurmic` has been extensively tested with the following features:
+The distributed training with slurmic has been extensively tested with the following features:
 
 
 **Single Node**
@@ -18,7 +18,7 @@ We haven't tested the following features yet, but they are expected to work:
 - ❓ Multi-node FSDP training
 
 
-Below is an example shows how to submit a distributed training job with `slurmic` and use ``accelerate`` for distributed training.
+Below is an example shows how to submit a distributed training job with slurmic and use ``accelerate`` for distributed training.
 
 
 Training function
@@ -31,7 +31,7 @@ Here is an example of using ``accelerate`` to conduct a distributed training. Pl
 
     from accelerate import Accelerator
     from accelerate.utils import set_seed
-    from slurmic.slurm import slurm_fn, SlurmConfig
+    from slurmic import slurm_fn, SlurmConfig
 
     @slurm_fn
     def main(config: SlurmConfig) -> None:
@@ -54,7 +54,7 @@ To launch a distributed job, it is necessary to set up the ``use_distributed_env
 Exported variables
 ------------------
 
-The ``distributed_launch_command`` is a command that is used to launch the distributed job. There are several arguments exposed by the `slurmic` which are useful to set up the distributed job. The arguments are as follows:
+The ``distributed_launch_command`` is a command that is used to launch the distributed job. There are several arguments exposed by the slurmic which are useful to set up the distributed job. The arguments are as follows:
 
 - ``num_processes``: int
 - ``num_machines``: int

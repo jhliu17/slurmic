@@ -1,7 +1,7 @@
 ‼️ The Sharp Bits of slurmic
 ########################
 
-Although the `slurmic` library is designed to be simple and easy to use, there are some sharp bits that you should be aware of. This section covers some of the sharp bits that you should be aware of when using the `slurmic` library.
+Although the slurmic library is designed to be simple and easy to use, there are some sharp bits that you should be aware of. This section covers some of the sharp bits that you should be aware of when using the slurmic library.
 
 ‼️ Pure functions
 =================

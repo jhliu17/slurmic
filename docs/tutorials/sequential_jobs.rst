@@ -1,7 +1,7 @@
 Slurm Jobs with slurmic
 ######################
 
-This example shows how to submit a series of jobs with `slurmic`.
+This example shows how to submit a series of jobs with slurmic.
 
 Configuration of SlurmFunction
 ==============================
@@ -12,7 +12,7 @@ The ``slurm_fn`` decorator converts a Python function into a SlurmFunction. The 
     :caption: A worker function with slurm settings
 
     import time
-    from slurmic.slurm import SlurmConfig, slurm_fn
+    from slurmic import SlurmConfig, slurm_fn
 
     slurm_settings = SlurmConfig(
         mode="slurm",
