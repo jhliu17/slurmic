@@ -39,6 +39,9 @@ def slurm_fn(
     return slurm_fn
 
 
+slurm = slurm_fn  # alias
+
+
 def slurm_launcher(
     ArgsType: Type[Any],
     parser: Union[str, Callable] = "tyro",
