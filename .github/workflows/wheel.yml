@@ -34,13 +34,13 @@ jobs:
         run: |
           uv sync --locked
 
-      - name: Build Wheel
+      - name: Build sdist and wheel
         run: |
           uv build
 
-      - name: Upload wheels to PyPI
+      - name: Upload sdist and wheel to PyPI
         if: ${{ github.event_name == 'release' }}
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          uv tool run twine upload --username __token__ --password $PYPI_TOKEN dist/*.whl
+          uv tool run twine upload --username __token__ --password $PYPI_TOKEN dist/*
