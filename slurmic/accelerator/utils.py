@@ -31,7 +31,14 @@ def nvidia_smi_gpu_memory_stats() -> dict:
 
 def nvidia_smi_gpu_memory_stats_str() -> str:
     """
-    Parse the nvidia-smi output and extract the memory used stats.
+    Parse the nvidia-smi output and return a human-readable GPU memory report.
     """
     stats = nvidia_smi_gpu_memory_stats()
-    return ", ".join([f"{k}: {v:.4f}" for k, v in stats.items()])
+    if not stats:
+        return "GPU memory usage: no GPUs detected"
+
+    # Keys look like "gpu_<idx>_mem_used_gb"; recover the index for a tidy label.
+    rows = [(key.split("_")[1], value) for key, value in stats.items()]
+    width = max(len(idx) for idx, _ in rows)
+    lines = [f"  GPU {idx:>{width}}: {value:7.2f} GB" for idx, value in rows]
+    return "GPU memory usage:\n" + "\n".join(lines)
