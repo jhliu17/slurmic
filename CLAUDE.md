@@ -94,11 +94,12 @@ To cut a release:
    ```
 
 3. **Commit and push** the release version (`git commit -am "Release v0.2.0" && git push origin main`).
-4. **Create the GitHub Release** — this creates the tag *and* triggers the PyPI upload:
+4. **Always write a curated changelog** to a file (e.g. `/tmp/slurmic_v0.2.0_notes.md`) — never rely on `--generate-notes`. Derive it from the commits since the previous tag (`git log v0.1.0..HEAD --oneline`) and read the actual diffs so entries describe user-facing behavior, not commit subjects. Group under `### Added` / `### Changed` / `### Dependencies` (and `### Fixed` / `### Removed` when applicable), and end with a compare link: `**Full changelog:** https://github.com/jhliu17/slurmic/compare/<prev-tag>...<new-tag>`.
+5. **Create the GitHub Release** with that changelog — this creates the tag *and* triggers the PyPI upload:
 
    ```bash
-   gh release create v0.2.0 --target main --title "v0.2.0" --generate-notes
+   gh release create v0.2.0 --target main --title "v0.2.0" --notes-file /tmp/slurmic_v0.2.0_notes.md
    ```
 
-   Then confirm the `wheel.yml` run succeeds and the new version appears on PyPI.
-5. **Open the next dev cycle**: bump `_PATCH` by one and restore `_SUFFIX = "dev"` (→ `0.2.1dev`), commit as `Start v0.2.1 development`, and push.
+   Then confirm the `wheel.yml` run succeeds and the new version appears on PyPI (`curl -s https://pypi.org/pypi/slurmic/json` should list both the `.whl` and the `.tar.gz`).
+6. **Open the next dev cycle**: bump `_PATCH` by one and restore `_SUFFIX = "dev"` (→ `0.2.1dev`), commit as `Start v0.2.1 development`, and push.
