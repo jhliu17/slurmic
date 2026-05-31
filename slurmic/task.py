@@ -3,7 +3,7 @@ import shlex
 import submitit
 import subprocess
 
-from typing import Union
+from typing import Callable, Union
 from dataclasses import dataclass
 from .config import SlurmConfig
 from .accelerator.utils import nvidia_smi_gpu_memory_stats_str
@@ -25,15 +25,18 @@ class Task:
         self.slurm_config = slurm_config
         self.verbose = verbose
 
-    def log(self, msg: str):
+    def log(self, msg: Union[str, Callable[[], str]]):
         """Log a message to the console if verbose is enabled.
 
         Args:
-            msg (str): the message to log.
+            msg (str | Callable[[], str]): the message to log, or a zero-arg callable
+                that produces it. Passing a callable defers the (possibly expensive or
+                failure-prone) message construction until verbose logging is actually
+                enabled.
         """
         if not self.verbose:
             return
-        print(msg)
+        print(msg() if callable(msg) else msg)
 
     def command(self) -> str:
         """Return the command to run the task. This method should be implemented by
@@ -158,7 +161,7 @@ class PyTorchDistributedTask(Task):
         # update environment variables
         os.environ.update(**env_setup)
 
-        self.log(nvidia_smi_gpu_memory_stats_str())
+        self.log(nvidia_smi_gpu_memory_stats_str)
         self.log(f"Master: {dist_env.master_addr}:{dist_env.master_port}")
         self.log(f"Rank: {dist_env.rank}")
         self.log(f"World size: {dist_env.world_size}")

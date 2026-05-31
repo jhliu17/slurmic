@@ -3,7 +3,6 @@ import torch
 import time
 import accelerate
 import contextlib
-import pytest
 import typing as tp
 
 from dataclasses import dataclass
@@ -21,6 +20,11 @@ def mocked_slurm() -> tp.Iterator[test_core.MockedSubprocess]:
     finally:
         # Clear the state of the shared watcher
         SlurmJob.watcher.clear()
+        # Submitting marks these env vars on the current process; clear them so
+        # they don't leak into the next test (the sentinel in particular flips
+        # the distributed second-launch dispatch).
+        os.environ.pop("SLURMIC_SLURM_HAS_BEEN_SET_UP", None)
+        os.environ.pop("SLURMIC_SLURM_PACKED_CODE", None)
 
 
 def get_slurm_config(output_path, is_distributed: bool = False):
@@ -177,18 +181,10 @@ def distributed_fn(*args, **kwargs):
     return args, kwargs
 
 
-@pytest.mark.skip(reason="mocked slurm doesn't work with distributed tasks")
-def test_distributed_slurm_function(tmp_path):
-    with mocked_slurm() as mock:
-        slurm_settings = get_slurm_config(f"{tmp_path}/outputs/", is_distributed=True)
-        job = distributed_fn[slurm_settings](1, k=1)
-        with mock.job_context(job.job_id):
-            submission.process_job(job.paths.folder)
-        result = job.results()
-        print(result)
-        assert result == [
-            0,
-        ]
+# NOTE: the distributed-job orchestration is covered in tests/test_distributed.py.
+# A real distributed run cannot be exercised under the mock (no scheduler runs the
+# generated sbatch script, no GPU), so those tests verify the slurmic-specific logic
+# — sbatch script generation, the distributed-env math, and the sentinel dispatch.
 
 
 if __name__ == "__main__":
