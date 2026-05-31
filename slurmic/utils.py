@@ -2,11 +2,54 @@ import os
 import shlex
 import shutil
 
+import pathspec
+
 from pathlib import Path
-from typing import Generator, Callable
+from typing import Generator, Callable, Optional
 
 
 WANDB_DIRS = ("wandb", ".wandb")
+
+# Patterns always ignored regardless of the project's .gitignore.
+DEFAULT_GITIGNORE_PATTERNS = (".git/",)
+
+
+def load_gitignore_spec(root: str) -> Optional[pathspec.GitIgnoreSpec]:
+    """Build a gitignore matcher from the root ``.gitignore`` (if present).
+
+    Returns ``None`` when the project has no ``.gitignore`` file, so callers can keep
+    their original ``include_fn`` / ``exclude_dir_fn`` filtering untouched. When a
+    ``.gitignore`` exists, VCS metadata is always ignored too (see
+    ``DEFAULT_GITIGNORE_PATTERNS``).
+    """
+    gitignore_path = os.path.join(root, ".gitignore")
+    if not os.path.isfile(gitignore_path):
+        return None
+
+    with open(gitignore_path, "r", encoding="utf-8") as f:
+        lines = list(DEFAULT_GITIGNORE_PATTERNS) + f.read().splitlines()
+    return pathspec.GitIgnoreSpec.from_lines(lines)
+
+
+def is_gitignored(
+    spec: Optional[pathspec.GitIgnoreSpec],
+    path: str,
+    root: str,
+    is_dir: bool = False,
+) -> bool:
+    """Return ``True`` if ``path`` is ignored by ``spec`` relative to ``root``."""
+    if spec is None:
+        return False
+
+    rel = os.path.relpath(path, root)
+    if rel == os.curdir:
+        return False
+
+    # gitignore patterns are always posix-style; directories match with a trailing slash.
+    rel = Path(rel).as_posix()
+    if is_dir:
+        rel += "/"
+    return spec.match_file(rel)
 
 
 def _is_py_or_dockerfile(path: str, root: str) -> bool:
@@ -62,6 +105,18 @@ def pack_code_files(
         raise ValueError(f"Code root {code_root} does not exist.")
     if not code_target.exists():
         code_target.mkdir(parents=True)
+
+    # When a .gitignore exists it becomes the primary discovery mechanism: every file
+    # that is not ignored gets packed, and the manual ``include_fn`` *adds back*
+    # explicitly matched files even when they are gitignored. Without a .gitignore we
+    # fall back to the original ``include_fn`` filtering. The manual ``exclude_dir_fn``
+    # always hard-excludes whole folders regardless.
+    spec = load_gitignore_spec(root)
+    if spec is not None:
+        base_include_fn = include_fn
+
+        def include_fn(path: str, r: str) -> bool:
+            return not is_gitignored(spec, path, r) or base_include_fn(path, r)
 
     for file_path in filtered_dir(root, include_fn, exclude_dir_fn):
         save_name = os.path.relpath(file_path, root)

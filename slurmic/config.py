@@ -52,7 +52,7 @@ class SlurmConfig:
 
         code_file_suffixes (List[str]): A list of file extensions for code files to be included when packing. Default includes ``.py``, ``.sh``, ``.yaml``, and ``.toml``.
 
-        exclude_code_folders (List[str]): A list of folder names relative to `code_root` that will be excluded from packing. Default excludes 'wandb', 'outputs', and 'datasets'.
+        exclude_code_folders (List[str]): A list of folder names relative to `code_root` that will be excluded from packing. Default excludes '.git', 'wandb', 'outputs', and 'datasets'.
 
         use_distributed_env (bool): Whether to use a distributed environment for the job. Default is False.
 
@@ -90,7 +90,7 @@ class SlurmConfig:
     code_root: str = "."
     code_file_suffixes: list[str] = field(default_factory=lambda: [".py", ".sh", ".yaml", ".toml"])
     exclude_code_folders: list[str] = field(
-        default_factory=lambda: ["wandb", "outputs", "datasets"]
+        default_factory=lambda: [".git", "wandb", "outputs", "datasets"]
     )
     use_distributed_env: bool = False
     distributed_env_task: Literal["torch"] = "torch"
