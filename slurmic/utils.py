@@ -63,8 +63,9 @@ def include_code_files(path: str, root: str, code_ext: list[str]):
 
 
 def exclude_code_folders(path: str, root: str, code_folders: list[str]):
+    rel = os.path.relpath(path, root)
     return any(
-        os.path.relpath(path, root).startswith(code_folder + os.sep) for code_folder in code_folders
+        rel == code_folder or rel.startswith(code_folder + os.sep) for code_folder in code_folders
     )
 
 
