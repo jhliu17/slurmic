@@ -4,6 +4,7 @@
 A package designed to provide seamless Python function execution on Slurm.
 
 ::::{grid} 1 2 2 3
+:padding: 0
 :margin: 4 4 0 0
 :gutter: 1
 

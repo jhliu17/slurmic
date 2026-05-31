@@ -22,6 +22,7 @@
    .. autosummary::
       :nosignatures:
    
+      slurm
       slurm_fn
       slurm_function
       slurm_launcher

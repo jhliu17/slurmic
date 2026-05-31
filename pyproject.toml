@@ -12,7 +12,11 @@ readme = "readme.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
 keywords = ["deep learning", "neural network", "research"]
 requires-python = ">=3.10"
-dependencies = ["tyro", "submitit>=1.5.4"]
+dependencies = [
+    "tyro",
+    "submitit>=1.5.4",
+    "pathspec>=1.1.1",
+]
 
 [dependency-groups]
 dev = [
