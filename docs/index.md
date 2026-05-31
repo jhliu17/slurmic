@@ -38,6 +38,7 @@ Launch distributed jobs in a flexible way.
 :maxdepth: 2
 
 get_started
+code_packing
 tutorials/sequential_jobs
 tutorials/distributed_training
 tutorials/sharp_bits

@@ -44,15 +44,15 @@ class SlurmConfig:
 
         setup (List[str]): A list of environment variable setup commands. Default is an empty list.
 
-        pack_code (bool): Whether to pack the codebase before submission. Default is False.
+        pack_code (bool): Whether to snapshot (pack) the codebase into the job's output folder before submission, so the job runs against a frozen copy that is decoupled from later edits to the working tree. See the :doc:`Code Packing </code_packing>` page for the full file-selection priority. Default is False.
 
         use_packed_code (bool): Whether to use the packed code for execution. Default is False.
 
         code_root (str): The root directory of the codebase, which will be used by the code packing. Default is the current directory (``.``).
 
-        code_file_suffixes (List[str]): A list of file extensions for code files to be included when packing. Default includes ``.py``, ``.sh``, ``.yaml``, and ``.toml``.
+        code_file_suffixes (List[str]): A list of file extensions treated as code files when packing. Their role depends on whether ``code_root`` contains a ``.gitignore``: with a ``.gitignore`` they act as an *add-back* whitelist that re-includes matching files even if they are gitignored; without a ``.gitignore`` they are the sole include filter. Default includes ``.py``, ``.sh``, ``.yaml``, and ``.toml``.
 
-        exclude_code_folders (List[str]): A list of folder names relative to `code_root` that will be excluded from packing. Default excludes '.git', 'wandb', 'outputs', and 'datasets'.
+        exclude_code_folders (List[str]): A list of folder names relative to `code_root` that are always hard-excluded from packing, overriding both ``.gitignore`` discovery and the ``code_file_suffixes`` add-back. Default excludes '.git', 'wandb', 'outputs', and 'datasets'.
 
         use_distributed_env (bool): Whether to use a distributed environment for the job. Default is False.
 
